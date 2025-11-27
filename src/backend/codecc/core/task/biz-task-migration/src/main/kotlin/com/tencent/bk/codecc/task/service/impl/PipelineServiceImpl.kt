@@ -196,7 +196,7 @@ open class PipelineServiceImpl @Autowired constructor(
         // 更新流水线model
         with(taskEntity) {
             val channelCode = pipelineUtils.getDevopsChannelCode(createFrom, taskEntity.nameEn)
-            val edit = client.getDevopsService(ServicePipelineResource::class.java).edit(userName, projectId, pipelineId, newModel, channelCode)
+            val edit = client.getDevopsService(ServicePipelineResource::class.java).editPipeline(userName, projectId, pipelineId, newModel, channelCode)
             if (Objects.nonNull(edit) && edit.data != true) {
                 throw CodeCCException(CommonMessageCode.BLUE_SHIELD_INTERNAL_ERROR)
             }
@@ -245,7 +245,7 @@ open class PipelineServiceImpl @Autowired constructor(
         )
         if("UPDATE" == pipelineAction) {
             val result = client.getDevopsService(ServicePipelineResource::class.java)
-                .edit(userName, taskInfoEntity.projectId, taskInfoEntity.pipelineId, modelParam, ChannelCode.CODECC_EE)
+                .editPipeline(userName, taskInfoEntity.projectId, taskInfoEntity.pipelineId, modelParam, ChannelCode.CODECC_EE)
             if (result.isNotOk() || null == result.data) {
                 logger.error("create pipeline fail! err msg: {}", result.message)
                 throw CodeCCException(CommonMessageCode.BLUE_SHIELD_INTERNAL_ERROR)
@@ -357,7 +357,7 @@ open class PipelineServiceImpl @Autowired constructor(
             val repoInfoVO = RepoInfoVO()
             repoInfoVO.repoHashId = repositoryHashId
             repoInfoVO.url = url
-            repoInfoVO.authType = authType
+            repoInfoVO.authType = authType?.toString()
             repoInfoVO.type = type.name
             repoInfoVO.aliasName = aliasName
             repoInfoVO
@@ -558,7 +558,7 @@ open class PipelineServiceImpl @Autowired constructor(
         }
 
         val modifyResult = client.getDevopsService(ServicePipelineResource::class.java)
-            .edit(userName, projectId, pipelineId, newModel, channelCode)
+            .editPipeline(userName, projectId, pipelineId, newModel, channelCode)
         if (modifyResult.isNotOk() || modifyResult.data != true) {
             logger.error("mongotemplate bs pipeline info fail! bs project id: {}", projectId)
             throw CodeCCException(CommonMessageCode.BLUE_SHIELD_INTERNAL_ERROR)
@@ -642,7 +642,7 @@ open class PipelineServiceImpl @Autowired constructor(
             )
         }
         val modifyResult = client.getDevopsService(ServicePipelineResource::class.java)
-            .edit(userName, projectId, pipelineId, newModel, channelCode)
+            .editPipeline(userName, projectId, pipelineId, newModel, channelCode)
         if (modifyResult.isNotOk()) {
             logger.error("mongotemplate bs pipeline info fail! bs project id: {}", projectId)
             throw CodeCCException(CommonMessageCode.BLUE_SHIELD_INTERNAL_ERROR)

@@ -17,6 +17,7 @@ import com.tencent.devops.common.codecc.util.JsonUtil
 import com.tencent.devops.common.constant.ComConstants.EMPTY_STRING
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
@@ -136,7 +137,7 @@ object LLMOpenAIApi {
 
         return flow {
             chatApi.chatCompletions(requestBody, authorStr).collect { chunkRsp ->
-                emit(json.encodeToString(BkChatCompletionChunk.serializer(), chunkRsp))
+                emit(json.encodeToString<BkChatCompletionChunk>(chunkRsp))
             }
         }
     }

@@ -1,29 +1,3 @@
-/*
- * Tencent is pleased to support the open source community by making BK-CODECC 蓝鲸代码检查平台 available.
- *
- * Copyright (C) 2019 Tencent.  All rights reserved.
- *
- * BK-CODECC 蓝鲸代码检查平台 is licensed under the MIT license.
- *
- * A copy of the MIT License is included in this file.
- *
- *
- * Terms of the MIT License:
- * ---------------------------------------------------
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the
- * Software is furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
- * LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
- * NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 package com.tencent.devops.common.auth
 
 import com.tencent.bk.sdk.iam.config.IamConfiguration
@@ -36,7 +10,6 @@ import com.tencent.devops.common.auth.api.service.AuthTaskService
 import com.tencent.devops.common.auth.service.IamEsbService
 import com.tencent.devops.common.auth.utils.CodeCCAuthResourceApi
 import com.tencent.devops.common.client.Client
-import com.tencent.devops.common.redis.RedisOperation
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.AutoConfigureOrder
@@ -78,23 +51,23 @@ class V3AuthExAutoConfiguration {
     fun authExPermissionApi(redisTemplate: RedisTemplate<String, String>,
                             client: Client,
                             authTaskService : AuthTaskService,
-                            codeccAuthPermissionStrApi: AuthPermissionStrApi) =
+                            codeccAuthPermissionApi: CodeCCV3AuthPermissionApi) =
             V3AuthExPermissionApi(
                 client = client,
                 redisTemplate = redisTemplate,
                 authTaskService = authTaskService,
-                codeccAuthPermissionApi = codeccAuthPermissionStrApi)
+                codeccAuthPermissionApi = codeccAuthPermissionApi)
 
     @Bean
     fun authExRegisterApi(authResourceApi: CodeCCAuthResourceApi) =
             V3AuthExRegisterApi(authResourceApi)
 
     @Bean
-    fun codeCCV3AuthPermissionApi(redisOperation: RedisOperation) =
-        CodeCCV3AuthPermissionApi(authHelper(), policyService(), redisOperation)
+    fun codeCCV3AuthPermissionApi(redisTemplate: RedisTemplate<String, String>) =
+        CodeCCV3AuthPermissionApi(authHelper(), policyService(), redisTemplate)
 
     @Bean
-    fun codeCCV3AuthResourceApi(redisOperation: RedisOperation,
+    fun codeCCV3AuthResourceApi(redisTemplate: RedisTemplate<String, String>,
                                 iamEsbService: IamEsbService,
                                 iamConfiguration: IamConfiguration) =
         CodeCCAuthResourceApi(iamEsbService, iamConfiguration)

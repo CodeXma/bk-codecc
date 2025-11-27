@@ -45,6 +45,7 @@ object AuthStrUtils {
             ExpressionOperationEnum.ANY -> projectList.add("*")
             ExpressionOperationEnum.EQUAL -> projectList.add(content.value.toString())
             ExpressionOperationEnum.IN -> projectList.addAll(StringUtils.obj2List(content.value.toString()))
+            else -> {} // 其他情况不处理
         }
         return projectList
     }
@@ -135,6 +136,7 @@ object AuthStrUtils {
                     parentExpression.operator
                 )
             )
+            else -> {} // 其他情况不处理
         }
         return instantList
     }
@@ -239,6 +241,7 @@ object AuthStrUtils {
             ExpressionOperationEnum.START_WITH -> {
                 instanceList.addAll(checkProject(projectId, expression).second)
             }
+            else -> {} // 其他情况不处理
         }
 
         return instanceList
@@ -267,7 +270,7 @@ object AuthStrUtils {
 
     private fun andCheck(instanceList: Set<String>, op: ExpressionOperationEnum): Boolean {
         if (op == ExpressionOperationEnum.AND) {
-            if (instanceList == null || instanceList.isEmpty()) {
+            if (instanceList.isEmpty()) {
                 return false
             }
             return true

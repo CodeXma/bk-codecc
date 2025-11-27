@@ -3,7 +3,7 @@ import com.tencent.devops.utils.findPropertyOrEmpty
 import kotlin.streams.toList
 
 plugins {
-    id("com.tencent.devops.boot") version "0.0.7"
+    id("com.tencent.devops.boot") version "1.1.0"
 }
 
 
@@ -11,7 +11,7 @@ val devopsDependencies = mapOf(
     "com.tencent.bk.devops.ci.common" to listOf(
         "common-pipeline",
         "common-redis",
-        "common-auth-v3",
+        "common-auth-provider",
         "common-kafka",
         "common-api",
         "common-web",
@@ -25,8 +25,7 @@ val devopsDependencies = mapOf(
     "com.tencent.bk.devops.ci.quality" to listOf("api-quality"),
     "com.tencent.bk.devops.ci.repository" to listOf("api-repository"),
     "com.tencent.bk.devops.ci.notify" to listOf("api-notify"),
-    "com.tencent.bk.devops.ci.image" to listOf("api-image"),
-    "com.tencent.bk.devops.ci.plugin" to listOf("api-plugin")
+    "com.tencent.bk.devops.ci.misc" to listOf("api-image", "api-plugin")
 ).entries.stream().map { entry -> entry.value.map { "${entry.key}:$it:${Versions.devopsVersion}" }.toList() }
         .toList().flatten()
 
@@ -55,7 +54,7 @@ allprojects {
             gradlePluginPortal()
         }
         mavenCentral()
-        jcenter()
+        // jcenter() 已废弃，使用 mavenCentral 替代
     }
 
     // 版本管理
@@ -69,7 +68,7 @@ allprojects {
         dependencies {
             dependency("com.tencent.bk.sdk:spring-boot-bk-audit-starter:${Versions.bkAudit}")
             dependency("org.hashids:hashids:${Versions.hashidsVersion}")
-            dependency("javax.ws.rs:javax.ws.rs-api:${Versions.jaxrsVersion}")
+            dependency("jakarta.ws.rs:jakarta.ws.rs-api:${Versions.jaxrsVersion}")
             dependency("org.tmatesoft.svnkit:svnkit:${Versions.svnkitVersion}")
             dependency("com.squareup.okhttp3:okhttp:${Versions.okHttpVersion}")
             dependency("org.apache.httpcomponents:httpclient:${Versions.httpclientVersion}")
@@ -104,12 +103,10 @@ allprojects {
                 entry("kotlin-stdlib-jdk8")
                 entry("kotlin-reflect")
             }
-            dependencySet("io.swagger:${Versions.swaggerVersion}") {
-                entry("swagger-annotations")
-                entry("swagger-jersey2-jaxrs")
-                entry("swagger-models")
-                entry("swagger-core")
-                entry("swagger-jaxrs")
+            dependencySet("io.swagger.core.v3:${Versions.swaggerVersion}") {
+                entry("swagger-annotations-jakarta")
+                entry("swagger-jaxrs2-jakarta")
+                entry("swagger-models-jakarta")
             }
             dependencySet("io.github.openfeign:${Versions.feignVersion}") {
                 entry("feign-jaxrs")
@@ -230,6 +227,10 @@ allprojects {
                     it.exclude("org.springframework.cloud", "spring-cloud-starter-config")
                     it.exclude("org.springframework.cloud", "spring-cloud-starter-consul-config")
                     it.exclude("org.springframework.cloud", "spring-cloud-starter-consul-discovery")
+                }
+                
+                else -> {
+                    // NONE 或其他模式不需要特殊排除
                 }
             }
         }

@@ -28,6 +28,8 @@ import com.tencent.bk.codecc.defect.model.TransferAuthorEntity;
 import com.tencent.bk.codecc.defect.model.defect.CCNDefectEntity;
 import com.tencent.bk.codecc.defect.model.incremental.CodeRepoEntity;
 import com.tencent.bk.codecc.defect.model.incremental.ToolBuildStackEntity;
+
+import java.util.concurrent.CompletableFuture;
 import com.tencent.bk.codecc.defect.model.redline.RedLineExtraParams;
 import com.tencent.bk.codecc.defect.pojo.DefectClusterDTO;
 import com.tencent.bk.codecc.defect.pojo.statistic.DefectStatisticModel;
@@ -62,6 +64,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
@@ -379,12 +382,12 @@ public class CCNDefectCommitConsumer extends AbstractDefectCommitConsumer {
         List<CCNDefectEntity> partDefectList = new ArrayList<>();
         Set<String> filePathSet = new HashSet<>();
         Set<String> relPathSet = new HashSet<>();
-        List<AsyncRabbitTemplate.RabbitConverterFuture<Boolean>> asyncResultList = new ArrayList<>();
+        List<CompletableFuture<Boolean>> asyncResultList = new ArrayList<>();
         AtomicBoolean running = new AtomicBoolean(true);
         CountDownLatch finishLatch = new CountDownLatch(1);
         Set<Long> taskList = concurrentDefectTracingConfigCache.getVipTaskSet();
         Boolean isVip = CollectionUtils.isNotEmpty(taskList) && taskList.contains(commitDefectVO.getTaskId());
-        LinkedBlockingQueue<AsyncRabbitTemplate.RabbitConverterFuture<Boolean>> asyncResultQueue =
+        LinkedBlockingQueue<CompletableFuture<Boolean>> asyncResultQueue =
                 setConcurrentBlockingQueue(
                         commitDefectVO.getTaskId(),
                         commitDefectVO.getToolName(),
@@ -452,8 +455,8 @@ public class CCNDefectCommitConsumer extends AbstractDefectCommitConsumer {
             Set<String> filterPaths,
             BuildEntity buildEntity,
             int chunkNo,
-            @NotNull LinkedBlockingQueue<AsyncRabbitTemplate.RabbitConverterFuture<Boolean>> asyncResultQueue,
-            List<AsyncRabbitTemplate.RabbitConverterFuture<Boolean>> secondResultList,
+            @NotNull LinkedBlockingQueue<CompletableFuture<Boolean>> asyncResultQueue,
+            List<CompletableFuture<Boolean>> secondResultList,
             Boolean isVip) {
         DefectClusterDTO defectClusterDTO = new DefectClusterDTO(
                 commitDefectVO,
@@ -462,7 +465,7 @@ public class CCNDefectCommitConsumer extends AbstractDefectCommitConsumer {
                 "",
                 ""
         );
-        AsyncRabbitTemplate.RabbitConverterFuture<Boolean> clusterResult = newCCNDefectTracingComponent
+        CompletableFuture<Boolean> clusterResult = newCCNDefectTracingComponent
                 .executeCluster(defectClusterDTO,
                         taskDetailVO,
                         chunkNo,

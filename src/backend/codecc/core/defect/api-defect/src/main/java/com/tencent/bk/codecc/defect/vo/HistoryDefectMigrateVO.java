@@ -26,8 +26,7 @@
 
 package com.tencent.bk.codecc.defect.vo;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -39,20 +38,20 @@ import lombok.NoArgsConstructor;
  * @date 2019/10/16
  */
 @Data
-@ApiModel("历史告警迁移")
+@Schema(description = "历史告警迁移")
 @AllArgsConstructor
 @NoArgsConstructor
 public class HistoryDefectMigrateVO {
 
-    @ApiModelProperty(value = "任务ID")
+    @Schema(description = "任务ID")
     private long taskId;
 
-    @ApiModelProperty(value = "重新提交次数")
+    @Schema(description = "重新提交次数")
     private Integer ignoreType;
 
-    @ApiModelProperty(value = "忽略原因")
+    @Schema(description = "忽略原因")
     private String ignoreReason;
 
-    @ApiModelProperty(value = "用户")
+    @Schema(description = "用户")
     private String user;
 }

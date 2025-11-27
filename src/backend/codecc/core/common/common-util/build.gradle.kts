@@ -3,17 +3,17 @@ plugins {
 }
 
 dependencies {
-    api("javax.ws.rs:javax.ws.rs-api")
+    api("jakarta.ws.rs:jakarta.ws.rs-api")
     api("org.hashids:hashids")
     //注意 新加的依赖
 //    api("org.glassfish.jersey.bundles.repackaged:jersey-guava")
-    api("com.google.guava:guava:29.0-jre")
+    api("com.google.guava:guava:${Versions.guavaVersion}")
     api("com.fasterxml.jackson.module:jackson-module-kotlin")
     api("com.fasterxml.jackson.core:jackson-databind")
     api("com.fasterxml.jackson.core:jackson-core")
     api("com.fasterxml.jackson.core:jackson-annotations")
-    api("com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider")
-    api("com.fasterxml.jackson.jaxrs:jackson-jaxrs-base")
+    api("com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-json-provider")
+    api("com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-base")
     api("org.bouncycastle:bcprov-jdk15on")
     api("org.bouncycastle:bcprov-ext-jdk15on")
     api("commons-collections:commons-collections")

@@ -77,8 +77,9 @@ class WebAutoConfiguration @Autowired constructor(private val profile: com.tence
     @Bean
     fun versionInfoResource() = VersionInfoResource()
 
-    @Bean
-    fun jmxAutoConfiguration(@Autowired environment: Environment) = JmxAutoConfiguration(environment)
+    // JmxAutoConfiguration 在 Spring Boot 3.x 中已自动配置，无需手动创建
+    // @Bean
+    // fun jmxAutoConfiguration(@Autowired environment: Environment) = JmxAutoConfiguration(environment)
 
     @Bean(name = ["traceIdResponseFilter"])
     fun traceIdResponseFilter() = TraceIdResponseFilter()

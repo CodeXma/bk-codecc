@@ -11,6 +11,7 @@ import com.tencent.bk.codecc.quartz.pojo.OperationType
 import com.tencent.bk.codecc.quartz.service.JobManageService
 import com.tencent.devops.common.api.util.UUIDUtil
 import org.apache.commons.codec.digest.DigestUtils
+import org.redisson.ElementsSubscribeService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -93,6 +94,8 @@ class JobManageServiceImpl @Autowired constructor(
             OperationType.REMOVE -> {
                 jobNameList.removeIf { it.jobName == jobInstance.jobName }
             }
+
+            else -> {}
         }
     }
 

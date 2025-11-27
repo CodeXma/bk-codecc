@@ -28,6 +28,8 @@ import com.tencent.bk.codecc.task.vo.FilterPathInputVO;
 import com.tencent.bk.codecc.task.vo.TaskDetailVO;
 import com.tencent.devops.common.api.codecc.util.JsonUtil;
 import com.tencent.devops.common.constant.ComConstants.DefectStatus;
+
+import java.util.concurrent.CompletableFuture;
 import com.tencent.devops.common.util.IterableUtils;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -317,14 +319,14 @@ public class NewLintDefectTracingComponent extends AbstractDefectTracingComponen
     protected List<LintDefectV2Entity> handleWithOutputModel(
             List<LintDefectV2Entity> originalDefectList,
             List<LintDefectV2Entity> currentDefectList,
-            Pair<String, AsyncRabbitTemplate.RabbitConverterFuture<Boolean>> asyncResult,
+            Pair<String, CompletableFuture<Boolean>> asyncResult,
             BuildEntity buildEntity, List<TransferAuthorEntity.TransferAuthorPair> transferAuthorList) {
         long beginTime = System.currentTimeMillis();
         List<LintDefectV2Entity> upsertDefectList = new ArrayList<>();
         if (asyncResult != null) {
             String outputFile = asyncResult.getFirst();
             log.info("begin handleWithOutputModel: {}", outputFile);
-            AsyncRabbitTemplate.RabbitConverterFuture<Boolean> asyncMsgFuture = asyncResult.getSecond();
+            CompletableFuture<Boolean> asyncMsgFuture = asyncResult.getSecond();
             try {
                 if (asyncMsgFuture.get()) {
                     log.info("return true: {}", outputFile);

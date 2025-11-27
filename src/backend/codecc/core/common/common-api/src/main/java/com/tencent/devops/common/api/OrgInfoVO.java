@@ -1,6 +1,6 @@
 package com.tencent.devops.common.api;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,19 +10,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrgInfoVO {
 
-    @ApiModelProperty
+    @Schema
     private Integer bgId;
 
-    @ApiModelProperty("业务线ID")
+    @Schema(description = "业务线ID")
     private Integer businessLineId;
 
-    @ApiModelProperty
+    @Schema
     private Integer deptId;
 
-    @ApiModelProperty
+    @Schema
     private Integer centerId;
 
-    @ApiModelProperty
+    @Schema
     private Integer groupId;
 
 

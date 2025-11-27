@@ -13,7 +13,7 @@ dependencies {
     api(project(":core:quartz:api-quartz"))
     api("org.json:json")
     api("org.redisson:redisson")
-    api(group = "com.tencent.bk.devops.ci.image", name = "api-image") {
+    api(group = "com.tencent.bk.devops.ci.misc", name = "api-image") {
         isChanging = true
     }
     api(group = "com.tencent.bk.devops.ci.project", name = "api-project") {

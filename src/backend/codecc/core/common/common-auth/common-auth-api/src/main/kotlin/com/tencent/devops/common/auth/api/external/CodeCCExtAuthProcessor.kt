@@ -1,6 +1,6 @@
 package com.tencent.devops.common.auth.api.external
 
-import javax.ws.rs.container.ContainerRequestContext
+import jakarta.ws.rs.container.ContainerRequestContext
 
 /**
  * 用于补充业务鉴权的接口

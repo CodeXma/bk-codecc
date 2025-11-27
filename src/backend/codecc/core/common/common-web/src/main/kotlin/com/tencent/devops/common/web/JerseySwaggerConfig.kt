@@ -27,12 +27,13 @@
 package com.tencent.devops.common.web
 
 import com.tencent.devops.common.service.Profile
-import io.swagger.jaxrs.config.BeanConfig
-import io.swagger.jaxrs.listing.ApiListingResource
-import io.swagger.jaxrs.listing.SwaggerSerializers
+import io.swagger.v3.jaxrs2.integration.resources.OpenApiResource
+import io.swagger.v3.oas.integration.SwaggerConfiguration
+import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.info.Info
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
-import javax.annotation.PostConstruct
+import jakarta.annotation.PostConstruct
 
 class JerseySwaggerConfig constructor(
     private val profile: Profile
@@ -52,9 +53,9 @@ class JerseySwaggerConfig constructor(
     @PostConstruct
     fun init() {
         logger.info("configSwagger-start")
+        // 注册 OpenAPI 资源
+        register(OpenApiResource::class.java)
         configSwagger()
-        register(SwaggerSerializers::class.java)
-        register(ApiListingResource::class.java)
         logger.info("configSwagger-end")
     }
 
@@ -65,13 +66,23 @@ class JerseySwaggerConfig constructor(
                 {
                     if (isLocal()) "" else "/${getServiceName()}"
                 }
-            BeanConfig().apply {
-                title = applicationDesc
-                version = applicationVersion
-                resourcePackage = packageName
-                scan = true
-                basePath = "/api$appName"
-            }
+            
+            // 配置 OpenAPI
+            val openAPI = OpenAPI()
+                .info(
+                    Info()
+                        .title(applicationDesc)
+                        .version(applicationVersion)
+                )
+            
+            val oasConfig = SwaggerConfiguration()
+                .openAPI(openAPI)
+                .resourcePackages(setOf(packageName))
+                .prettyPrint(true)
+            
+            // 设置 Swagger 上下文配置
+            io.swagger.v3.oas.integration.api.OpenApiContext.OPENAPI_CONTEXT_ID_KEY
+            property("openApi.configuration.resourcePackages", packageName)
         }
     }
 }

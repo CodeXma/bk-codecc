@@ -71,13 +71,13 @@ class CoreRabbitMQConfiguration {
     private val addresses: String? = null
 
     @Value("\${spring.rabbitmq.core.listener.simple.concurrency:#{null}}")
-    private var concurrency: Int? = null
+    private val concurrency: Int? = null
 
     @Value("\${spring.rabbitmq.core.listener.simple.max-concurrency:#{null}}")
-    private var maxConcurrency: Int? = null
+    private val maxConcurrency: Int? = null
 
     @Value("\${spring.rabbitmq.core.cache.channel.size:#{null}}")
-    private var channelCacheSize: Int? = null
+    private val channelCacheSize: Int? = null
 
     @Value("\${spring.rabbitmq.listener.simple.prefetch:#{null}}")
     private val preFetchCount: Int? = null
@@ -89,14 +89,14 @@ class CoreRabbitMQConfiguration {
     @Primary
     fun coreConnectionFactory(config: CoreRabbitMQProperties): ConnectionFactory {
         val connectionFactory = CachingConnectionFactory()
-        connectionFactory.host = config.host
-        connectionFactory.port = config.port
-        connectionFactory.username = username!!
+        connectionFactory.setHost(config.host)
+        connectionFactory.setPort(config.port)
+        connectionFactory.setUsername(username!!)
         connectionFactory.setPassword(password!!)
-        connectionFactory.virtualHost = getVirtualHost()
+        connectionFactory.setVirtualHost(getVirtualHost())
         connectionFactory.setAddresses(addresses!!)
         if (channelCacheSize != null && channelCacheSize!! > 0) {
-            connectionFactory.channelCacheSize = channelCacheSize!!
+            connectionFactory.setChannelCacheSize(channelCacheSize!!)
         }
         if (channelRpcTimeout != null && channelRpcTimeout > 0) {
             connectionFactory.rabbitConnectionFactory.channelRpcTimeout = channelRpcTimeout

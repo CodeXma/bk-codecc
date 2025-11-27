@@ -1,7 +1,7 @@
 package com.tencent.bk.codecc.task.vo;
 
 import com.tencent.bk.codecc.task.vo.checkerset.OpenSourceCheckerSetVO;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Data
 @NoArgsConstructor
-@ApiModel("开源治理或预发布版规则集所有对应规则集映射")
+@Schema(description = "开源治理或预发布版规则集所有对应规则集映射")
 public class OpenScanAndPreProdCheckerSetMapVO {
 
     /**

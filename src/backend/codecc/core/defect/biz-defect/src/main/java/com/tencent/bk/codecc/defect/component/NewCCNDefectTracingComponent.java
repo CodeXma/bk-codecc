@@ -28,6 +28,8 @@ import com.tencent.devops.common.api.codecc.util.JsonUtil;
 import com.tencent.devops.common.constant.ComConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
+
+import java.util.concurrent.CompletableFuture;
 import org.apache.commons.lang.StringUtils;
 import org.bson.types.ObjectId;
 import org.springframework.amqp.rabbit.AsyncRabbitTemplate;
@@ -266,14 +268,14 @@ public class NewCCNDefectTracingComponent extends AbstractDefectTracingComponent
     protected List<CCNDefectEntity> handleWithOutputModel(
             List<CCNDefectEntity> originalDefectList,
             List<CCNDefectEntity> currentDefectList,
-            Pair<String, AsyncRabbitTemplate.RabbitConverterFuture<Boolean>> asyncResult,
+            Pair<String, CompletableFuture<Boolean>> asyncResult,
             BuildEntity buildEntity, List<TransferAuthorEntity.TransferAuthorPair> transferAuthorList) {
         long beginTime = System.currentTimeMillis();
         List<CCNDefectEntity> upsertDefectList = new ArrayList<>();
         if (asyncResult != null) {
             String outputFile = asyncResult.getFirst();
             log.info("begin handleWithOutputModel: {}", outputFile);
-            AsyncRabbitTemplate.RabbitConverterFuture<Boolean> asyncMsgFuture = asyncResult.getSecond();
+            CompletableFuture<Boolean> asyncMsgFuture = asyncResult.getSecond();
             try {
                 if (asyncMsgFuture.get()) {
                     log.info("return true: {}", outputFile);

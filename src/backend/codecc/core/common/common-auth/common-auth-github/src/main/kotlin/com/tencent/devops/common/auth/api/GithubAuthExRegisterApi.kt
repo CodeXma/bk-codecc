@@ -2,7 +2,6 @@ package com.tencent.devops.common.auth.api
 
 import com.alibaba.fastjson.JSONObject
 import com.tencent.devops.auth.api.service.ServicePermissionAuthResource
-import com.tencent.devops.auth.pojo.dto.GrantInstanceDTO
 import com.tencent.devops.common.auth.api.external.AuthExRegisterApi
 import com.tencent.devops.common.auth.api.pojo.external.PipelineAuthAction
 import com.tencent.devops.common.auth.api.service.AuthTaskService
@@ -25,29 +24,26 @@ class GithubAuthExRegisterApi(
         if (pipelineId.isEmpty()) {
             return true
         }
-        PipelineAuthAction.values().forEach {
-            registerCodeCCTaskPermission(user, pipelineId, it.actionName, projectId)
-        }
-        return true
-    }
-
-    private fun registerCodeCCTaskPermission(user: String, pipelineId: String, action: String, projectId: String) {
-        val grantInstanceDTO = GrantInstanceDTO(
-            properties.pipelineResourceType ?: "pipelineId",
-            pipelineId,
-            null,
-            action,
-            user
-        )
-        val result = client.getDevopsService(ServicePermissionAuthResource::class.java).grantInstancePermission(
-            user, properties.token ?: "", projectId, grantInstanceDTO
-        )
+        
+        // 使用 resourceCreateRelation 方法代替已废弃的 grantInstancePermission
+        val result = client.getDevopsService(ServicePermissionAuthResource::class.java, projectId)
+            .resourceCreateRelation(
+                userId = user,
+                token = properties.token ?: "",
+                projectCode = projectId,
+                resourceType = properties.pipelineResourceType ?: "pipeline",
+                resourceCode = pipelineId,
+                resourceName = taskName
+            )
+        
         if (result.isNotOk()) {
             logger.error(
-                "registerCodeCCTaskPermission $user $pipelineId $action $projectId fail," +
+                "registerCodeCCTask $user $taskId $taskName $projectId fail," +
                         " result ${JSONObject.toJSONString(result)}"
             )
+            return false
         }
+        return true
     }
 
     override fun deleteCodeCCTask(taskId: String, projectId: String): Boolean {

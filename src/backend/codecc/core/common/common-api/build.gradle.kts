@@ -4,8 +4,8 @@ plugins {
 
 dependencies {
     api(project(":core:common:common-util"))
-    api("javax.ws.rs:javax.ws.rs-api")
-    api("io.swagger:swagger-annotations") {
+    api("jakarta.ws.rs:jakarta.ws.rs-api")
+    api("io.swagger.core.v3:swagger-annotations-jakarta") {
         exclude(group = "org.json", module = "json")
     }
     api("org.hashids:hashids")
@@ -13,8 +13,8 @@ dependencies {
     api("com.fasterxml.jackson.core:jackson-databind")
     api("com.fasterxml.jackson.core:jackson-core")
     api("com.fasterxml.jackson.core:jackson-annotations")
-    api("com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider")
-    api("com.fasterxml.jackson.jaxrs:jackson-jaxrs-base")
+    api("com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-json-provider")
+    api("com.fasterxml.jackson.jakarta.rs:jackson-jakarta-rs-base")
     api("org.bouncycastle:bcprov-jdk15on")
     api("org.bouncycastle:bcprov-ext-jdk15on")
     api("com.squareup.okhttp3:okhttp")

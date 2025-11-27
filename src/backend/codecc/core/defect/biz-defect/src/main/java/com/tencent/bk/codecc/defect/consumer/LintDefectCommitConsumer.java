@@ -28,6 +28,8 @@ import com.tencent.bk.codecc.defect.dao.defect.mongotemplate.LintDefectV2Dao;
 import com.tencent.bk.codecc.defect.model.BuildEntity;
 import com.tencent.bk.codecc.defect.model.CheckerDetailEntity;
 import com.tencent.bk.codecc.defect.model.FileDefectGatherEntity;
+
+import java.util.concurrent.CompletableFuture;
 import com.tencent.bk.codecc.defect.model.LintFileV2Entity;
 import com.tencent.bk.codecc.defect.model.TransferAuthorEntity;
 import com.tencent.bk.codecc.defect.model.defect.LintDefectV2Entity;
@@ -585,12 +587,12 @@ public class LintDefectCommitConsumer extends AbstractDefectCommitConsumer {
             Set<String> eachBatchRelPathSet = new HashSet<>();
             List<LintDefectV2Entity> lintDefectList = new ArrayList<>();
             //用于存储因为阻塞队列满了以后无法塞入队列的发送结果
-            List<AsyncRabbitTemplate.RabbitConverterFuture<Boolean>> asyncResultList = new ArrayList<>();
+            List<CompletableFuture<Boolean>> asyncResultList = new ArrayList<>();
             AtomicBoolean running = new AtomicBoolean(true);
             CountDownLatch finishLatch = new CountDownLatch(1);
             Set<Long> taskList = concurrentDefectTracingConfigCache.getVipTaskSet();
             Boolean isVip = CollectionUtils.isNotEmpty(taskList) && taskList.contains(taskId);
-            LinkedBlockingQueue<AsyncRabbitTemplate.RabbitConverterFuture<Boolean>> asyncResultQueue =
+            LinkedBlockingQueue<CompletableFuture<Boolean>> asyncResultQueue =
                     setConcurrentBlockingQueue(
                             taskId,
                             toolName,
@@ -877,8 +879,8 @@ public class LintDefectCommitConsumer extends AbstractDefectCommitConsumer {
             BuildEntity buildEntity,
             int chunkNo,
             List<TransferAuthorEntity.TransferAuthorPair> transferAuthorList,
-            @NotNull LinkedBlockingQueue<AsyncRabbitTemplate.RabbitConverterFuture<Boolean>> asyncResultQueue,
-            List<AsyncRabbitTemplate.RabbitConverterFuture<Boolean>> secondResultList,
+            @NotNull LinkedBlockingQueue<CompletableFuture<Boolean>> asyncResultQueue,
+            List<CompletableFuture<Boolean>> secondResultList,
             Boolean isVip) {
         DefectClusterDTO defectClusterDTO = new DefectClusterDTO(
                 commitDefectVO,
@@ -887,7 +889,7 @@ public class LintDefectCommitConsumer extends AbstractDefectCommitConsumer {
                 "",
                 ""
         );
-        AsyncRabbitTemplate.RabbitConverterFuture<Boolean> clusterResult = newLintDefectTracingComponent
+        CompletableFuture<Boolean> clusterResult = newLintDefectTracingComponent
                 .executeCluster(defectClusterDTO,
                         taskDetailVO,
                         chunkNo,

@@ -28,6 +28,8 @@ import com.tencent.bk.codecc.defect.model.BuildEntity;
 import com.tencent.bk.codecc.defect.model.defect.DefectEntity;
 import com.tencent.bk.codecc.defect.model.incremental.CodeRepoEntity;
 import com.tencent.bk.codecc.defect.model.incremental.CodeRepoInfoEntity;
+
+import java.util.concurrent.CompletableFuture;
 import com.tencent.bk.codecc.defect.service.BuildService;
 import com.tencent.bk.codecc.defect.service.FilterPathService;
 import com.tencent.bk.codecc.defect.service.HotColdDataSeparationService;
@@ -383,7 +385,7 @@ public abstract class AbstractDefectCommitConsumer extends AbstractDefectCommitO
      * @param isVip
      * @return
      */
-    protected LinkedBlockingQueue<AsyncRabbitTemplate.RabbitConverterFuture<Boolean>> setConcurrentBlockingQueue(
+    protected LinkedBlockingQueue<CompletableFuture<Boolean>> setConcurrentBlockingQueue(
             Long taskId,
             String toolName,
             String buildId,
@@ -391,7 +393,7 @@ public abstract class AbstractDefectCommitConsumer extends AbstractDefectCommitO
             CountDownLatch finishLatch,
             Boolean isVip
     ) {
-        LinkedBlockingQueue<AsyncRabbitTemplate.RabbitConverterFuture<Boolean>> asyncResultQueue =
+        LinkedBlockingQueue<CompletableFuture<Boolean>> asyncResultQueue =
                 new LinkedBlockingQueue<>(concurrentDefectTracingConfigCache.getConcurrentLimit(isVip));
         new Thread(() -> {
             try {
@@ -403,7 +405,7 @@ public abstract class AbstractDefectCommitConsumer extends AbstractDefectCommitO
                     }
                     try {
                         synchronized (asyncResultQueue) {
-                            AsyncRabbitTemplate.RabbitConverterFuture<Boolean> clusterResult = asyncResultQueue.poll();
+                            CompletableFuture<Boolean> clusterResult = asyncResultQueue.poll();
                             if (null != clusterResult) {
                                 /*
                                  * 对取出的异步聚类结果进行判断

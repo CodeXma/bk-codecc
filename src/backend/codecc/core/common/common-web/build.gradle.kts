@@ -15,4 +15,6 @@ dependencies {
     api(group = "com.tencent.bk.devops.ci.project", name = "api-project"){
         isChanging=true
     }
+    // Swagger Jakarta JAX-RS 依赖
+    api("io.swagger.core.v3:swagger-jaxrs2-jakarta:${Versions.swaggerVersion}")
 }

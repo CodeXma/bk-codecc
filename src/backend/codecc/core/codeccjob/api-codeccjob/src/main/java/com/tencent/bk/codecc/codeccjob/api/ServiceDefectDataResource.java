@@ -28,17 +28,17 @@ package com.tencent.bk.codecc.codeccjob.api;
 
 import com.tencent.devops.common.api.annotation.ServiceInterface;
 import com.tencent.devops.common.api.pojo.codecc.Result;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import java.util.Set;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
+import jakarta.ws.rs.core.MediaType;
 
 /**
  * 服务间调用的告警管理服务
@@ -46,45 +46,45 @@ import javax.ws.rs.core.MediaType;
  * @version V1.0
  * @date 2019/10/20
  */
-@Api(tags = {"SERVICE_DATA"}, description = "服务间调用的告警管理服务")
+@Tag(name = "SERVICE_DATA", description = "服务间调用的告警管理服务")
 @Path("/service/defect")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @ServiceInterface(value = "defect")
 public interface ServiceDefectDataResource {
 
-    @ApiOperation("迁移数据")
+    @Operation(summary = "迁移数据")
     @Path("/migrate/history")
     @GET
     Result<String> migrateHistoryDefect(
-            @ApiParam(value = "任务ID")
+            @Parameter(description = "任务ID")
             @QueryParam("taskId")
             Long taskId,
-            @ApiParam(value = "是否全部")
+            @Parameter(description = "是否全部")
             @QueryParam("all")
             Boolean all,
-            @ApiParam(value = "忽略类型")
+            @Parameter(description = "忽略类型")
             @QueryParam("ignoreType")
             Integer ignoreType,
-            @ApiParam(value = "忽略原因")
+            @Parameter(description = "忽略原因")
             @QueryParam("ignoreReason")
             String ignoreReason,
-            @ApiParam(value = "用户")
+            @Parameter(description = "用户")
             @QueryParam("user")
             String user
     );
 
-    @ApiOperation("迁移数据")
+    @Operation(summary = "迁移数据")
     @Path("/migrate/history/rollback")
     @GET
     Result<String> rollbackMigrateHistoryDefect(
-            @ApiParam(value = "任务ID")
+            @Parameter(description = "任务ID")
             @QueryParam("taskId")
             Long taskId,
-            @ApiParam(value = "是否全部")
+            @Parameter(description = "是否全部")
             @QueryParam("all")
             Boolean all,
-            @ApiParam(value = "忽略类型")
+            @Parameter(description = "忽略类型")
             @QueryParam("ignoreType")
             Integer ignoreType
     );
