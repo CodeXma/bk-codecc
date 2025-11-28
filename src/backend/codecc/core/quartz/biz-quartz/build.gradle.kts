@@ -12,7 +12,7 @@ dependencies {
     api("org.quartz-scheduler:quartz")
     api("org.quartz-scheduler:quartz-jobs")
     api("org.reflections:reflections")
-    api("org.codehaus.groovy:groovy:2.5.3")
+    api("org.codehaus.groovy:groovy:${Versions.groovyVersion}")  // Groovy 3.0+ 支持 JDK 17
     api(group = "com.tencent.bk.devops.ci.common", name="common-redis"){
         isChanging = true
     }

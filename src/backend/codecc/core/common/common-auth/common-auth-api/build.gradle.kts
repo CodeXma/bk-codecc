@@ -46,8 +46,8 @@ dependencies {
     api("io.swagger.core.v3:swagger-jaxrs2-jakarta") {
         exclude(group = "org.json", module = "json")
     }
-    api("com.github.fge:json-schema-validator:2.2.6")
-    api("com.networknt:json-schema-validator:1.0.49")
+    api("com.github.fge:json-schema-validator:${Versions.jsonSchemaVersion}")
+    api("com.networknt:json-schema-validator:${Versions.networkntJsonSchemaVersion}")
     api(group = "com.tencent.bk.devops.ci.auth", name = "api-auth"){
         isChanging=true
     }

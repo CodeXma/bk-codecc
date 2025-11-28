@@ -61,7 +61,30 @@ object Versions {
     const val cosVersion = "5.6.185"
     const val xzVersion = "1.9"
     const val bkAudit = "2.0.0"
-    const val dockerJavaVersion = "3.3.3"
+
+    // Ktor 框架 (用于 LLM 模块) - JDK 8+
+    const val ktorVersion = "2.2.1"
+    
+    // WebSocket API - Jakarta EE 9+ 版本 (JDK 11+)
+    const val jakartaWebsocketVersion = "2.1.0"
+    
+    // JSON 处理库 - JDK 8+
+    const val gsonVersion = "2.8.9"
+    
+    // 工具库
+    const val groovyVersion = "3.0.10"  // ⚠️ 从 2.5.3 升级，Groovy 3.0+ 支持 JDK 17
+    const val freemarkerVersion = "2.3.31"  // JDK 8+
+    const val networkntJsonSchemaVersion = "1.0.49"  // JDK 8+
+    const val commonsLangVersion = "2.6"  // JDK 1.5+
+    const val commonsCodecVersion = "1.9"  // JDK 1.5+
+    
+    // 测试依赖
+    const val mockitoKotlinVersion = "1.6.0"
+    
+    // 注意：buildSrc/build.gradle.kts 的插件版本无法使用此处定义的常量
+    // 因为 buildSrc 构建时 Versions.kt 尚未编译，必须在 buildSrc/build.gradle.kts 中硬编码
+    // - gradle-jooq-plugin: 5.2.1
+    // - shadow: 6.1.0
 
     // Devops 依赖版本
     const val devopsVersion = "4.1.0-rc.3"

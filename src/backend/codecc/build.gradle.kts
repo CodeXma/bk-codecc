@@ -189,7 +189,7 @@ allprojects {
         testImplementation(group = "com.github.shyiko", name = "ktlint", version = Versions.ktlintVersion)
         testImplementation("junit:junit")
         testImplementation("org.mockito:mockito-all")
-        testImplementation("com.nhaarman:mockito-kotlin-kt1.1:1.6.0")
+        testImplementation("com.nhaarman:mockito-kotlin-kt1.1:${Versions.mockitoKotlinVersion}")
     }
 
     val property = project.findPropertyOrEmpty("devops.assemblyMode").trim()

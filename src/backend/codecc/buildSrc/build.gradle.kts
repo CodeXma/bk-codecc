@@ -7,7 +7,7 @@ repositories {
     mavenLocal()
     maven(url = "https://plugins.gradle.org/m2/")
     mavenCentral()
-    jcenter()
+//    jcenter()
 }
 
 // 依赖插件
